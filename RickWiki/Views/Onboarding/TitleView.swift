@@ -36,10 +36,8 @@ private struct Teardrop: Shape {
 
 struct TitleView: View {
     @State private var drops: [Drop] = []
-    @State private var textSize: CGSize = .zero
     @State private var isPulsing = false
 
-    private let text = "Rick and Morty"
     private let timer = Timer.publish(every: 0.3, on: .main, in: .common).autoconnect()
 
     var body: some View {
@@ -47,18 +45,16 @@ struct TitleView: View {
             VStack(spacing: 0) {
                 Spacer()
 
-                Text(text)
-                    .font(.system(size: 44, weight: .black))
-                    .foregroundColor(.green) // ✅ Текст зелёный
-                    .background(GeometryReader { geo in
-                        Color.clear.onAppear { textSize = geo.size }
-                    })
-                    .overlay(alignment: .topLeading) {
+                Image("TitleHero")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 300)
+                    .overlay(alignment: .bottom) {
                         ForEach(drops) { drop in
-                            Teardrop() // ✅ Каплевидная форма
-                                .fill(.green) // ✅ Зелёные капли
-                                .frame(width: 5, height: 9) // Узкая капля
-                                .offset(x: drop.x, y: textSize.height + drop.offset)
+                            Teardrop()
+                                .fill(.green)
+                                .frame(width: 5, height: 9)
+                                .offset(x: drop.x, y: drop.offset)
                                 .opacity(drop.opacity)
                         }
                     }
@@ -67,7 +63,7 @@ struct TitleView: View {
 
                 Image(systemName: "chevron.down")
                     .font(.title2)
-                    .foregroundColor(.green.opacity(0.6)) // ✅ Стрелка тоже зелёная
+                    .foregroundColor(.green.opacity(0.6))
                     .scaleEffect(isPulsing ? 1.3 : 1.0)
                     .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: isPulsing)
                     .padding(.bottom, 40)
@@ -80,19 +76,14 @@ struct TitleView: View {
     }
 
     private func spawnDrop() {
-        guard textSize.width > 0 else { return }
-
-        let charWidth = textSize.width / CGFloat(text.count)
-        let index = Int.random(in: 0..<text.count)
-        let x = CGFloat(index) * charWidth + charWidth / 2
-
-        let drop = Drop(x: x)
+        let x = CGFloat.random(in: 20...300)
+        var drop = Drop(x: x, offset: -8)
         drops.append(drop)
 
         let id = drop.id
         withAnimation(.easeOut(duration: 0.6)) {
             guard let i = drops.firstIndex(where: { $0.id == id }) else { return }
-            drops[i].offset = 30
+            drops[i].offset = 40
             drops[i].opacity = 0
         }
 

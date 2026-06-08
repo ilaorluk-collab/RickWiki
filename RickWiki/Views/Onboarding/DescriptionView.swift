@@ -8,9 +8,10 @@ struct DescriptionView: View {
             VStack(spacing: 24) {
                 Spacer()
 
-                Image(systemName: "person.2.fill")
-                    .font(.system(size: 80))
-                    .foregroundColor(.green)
+                Image("RickMortyHero")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 180)
                     .scaleEffect(hasAppeared ? 1 : 0.7)
                     .opacity(hasAppeared ? 1 : 0)
                     .animation(.easeOut(duration: 0.6).delay(0.2), value: hasAppeared)
