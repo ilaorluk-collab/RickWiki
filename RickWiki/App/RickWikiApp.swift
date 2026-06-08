@@ -4,7 +4,11 @@ import SwiftUI
 struct RickWikiApp: App {
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            NavigationStack {
+                OnboardingView()
+                    .toolbar(.hidden, for: .navigationBar)
+            }
+            .tint(.green)
         }
     }
 }

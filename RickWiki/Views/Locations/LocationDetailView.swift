@@ -5,14 +5,19 @@ struct LocationDetailView: View {
 
     var body: some View {
         List {
-            LabeledContent("Name", value: location.name)
-            LabeledContent("Type", value: location.type)
-            LabeledContent("Dimension", value: location.dimension)
-            LabeledContent("Residents", value: "\(location.residents.count)")
-            LabeledContent("Created", value: location.created)
+            Group {
+                LabeledContent("Name", value: location.name)
+                LabeledContent("Type", value: location.type)
+                LabeledContent("Dimension", value: location.dimension)
+                LabeledContent("Residents", value: "\(location.residents.count)")
+                LabeledContent("Created", value: location.created)
+            }
+            .listRowBackground(Color.clear)
         }
+        .scrollContentBackground(.hidden)
         .navigationTitle(location.name)
         .navigationBarTitleDisplayMode(.inline)
+        .portalBackground(opacity: 0.45)
     }
 }
 

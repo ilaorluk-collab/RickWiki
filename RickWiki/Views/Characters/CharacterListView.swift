@@ -9,17 +9,23 @@ struct CharacterListView: View {
                 ProgressView("Loading characters...")
                     .frame(maxWidth: .infinity)
                     .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
             } else if let error = viewModel.errorMessage, viewModel.characters.isEmpty {
                 ContentUnavailableView(
                     "Error",
                     systemImage: "exclamationmark.triangle",
                     description: Text(error)
                 )
+                .tint(.green)
+                .listRowBackground(Color.clear)
             } else {
                 ForEach(Array(viewModel.characters.enumerated()), id: \.element.id) { index, character in
                     NavigationLink(destination: CharacterDetailView(character: character)) {
                         CharacterRow(character: character)
                     }
+                    .tint(.green)
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
                     .onAppear {
                         if index == viewModel.characters.count - 1 {
                             Task { await viewModel.loadNextPage() }
@@ -34,21 +40,27 @@ struct CharacterListView: View {
                         Spacer()
                     }
                     .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
                 }
             }
         }
         .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .background(.clear) // ✅ ВОТ ЧТО НАДО ДОБАВИТЬ
         .navigationTitle("Characters")
+        .toolbarBackground(.hidden, for: .navigationBar) // ✅ И ЭТО
         .refreshable {
             await viewModel.refresh()
         }
         .task {
             await viewModel.loadNextPage()
         }
+        // ❌ УБРАТЬ .portalBackground() — он перекрывает родительский фон
     }
 }
 
-private struct CharacterRow: View {
+// CharacterRow без изменений
+struct CharacterRow: View {
     let character: Character
 
     var body: some View {
@@ -63,8 +75,10 @@ private struct CharacterRow: View {
                 case .failure:
                     Image(systemName: "person.circle.fill")
                         .font(.title)
+                        .foregroundColor(.primary.opacity(0.5))
                 case .empty:
                     ProgressView()
+                        .tint(.green)
                 @unknown default:
                     EmptyView()
                 }
@@ -74,11 +88,12 @@ private struct CharacterRow: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(character.name)
                     .font(.headline)
+                    .foregroundColor(.primary)
                 HStack(spacing: 6) {
                     statusDot(for: character.status)
                     Text(character.species)
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundColor(.primary.opacity(0.6))
                 }
             }
         }

@@ -31,14 +31,19 @@ struct CharacterDetailView: View {
                     LabeledContent("Gender", value: character.gender)
                     LabeledContent("Origin", value: character.origin.name)
                     LabeledContent("Location", value: character.location.name)
-                    LabeledContent("Episodes", value: "\(character.episode.count)")
+                    NavigationLink(destination: CharacterEpisodeListView(character: character)) {
+                        LabeledContent("Episodes", value: "\(character.episode.count)")
+                    }
+                    .tint(.green)
                 }
                 .padding()
             }
             .padding()
         }
+        .scrollContentBackground(.hidden)
         .navigationTitle(character.name)
         .navigationBarTitleDisplayMode(.inline)
+        .portalBackground(opacity: 0.45)
     }
 }
 

@@ -9,17 +9,23 @@ struct EpisodeListView: View {
                 ProgressView("Loading episodes...")
                     .frame(maxWidth: .infinity)
                     .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
             } else if let error = viewModel.errorMessage, viewModel.episodes.isEmpty {
                 ContentUnavailableView(
                     "Error",
                     systemImage: "exclamationmark.triangle",
                     description: Text(error)
                 )
+                .tint(.green)
+                .listRowBackground(Color.clear)
             } else {
                 ForEach(Array(viewModel.episodes.enumerated()), id: \.element.id) { index, episode in
                     NavigationLink(destination: EpisodeDetailView(episode: episode)) {
                         EpisodeRow(episode: episode)
                     }
+                    .tint(.green)
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
                     .onAppear {
                         if index == viewModel.episodes.count - 1 {
                             Task { await viewModel.loadNextPage() }
@@ -34,11 +40,15 @@ struct EpisodeListView: View {
                         Spacer()
                     }
                     .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
                 }
             }
         }
         .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .background(.clear)
         .navigationTitle("Episodes")
+        .toolbarBackground(.hidden, for: .navigationBar)
         .refreshable {
             await viewModel.refresh()
         }
@@ -48,22 +58,23 @@ struct EpisodeListView: View {
     }
 }
 
-private struct EpisodeRow: View {
+struct EpisodeRow: View {
     let episode: Episode
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(episode.name)
                 .font(.headline)
+                .foregroundColor(.primary)
             HStack(spacing: 4) {
                 Text(episode.episode)
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(.primary.opacity(0.6))
                 Text("·")
-                    .foregroundStyle(.tertiary)
+                    .foregroundColor(.primary.opacity(0.3))
                 Text(episode.airDate)
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(.primary.opacity(0.6))
             }
         }
         .padding(.vertical, 4)

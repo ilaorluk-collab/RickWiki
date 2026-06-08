@@ -5,14 +5,22 @@ struct EpisodeDetailView: View {
 
     var body: some View {
         List {
-            LabeledContent("Name", value: episode.name)
-            LabeledContent("Air Date", value: episode.airDate)
-            LabeledContent("Episode", value: episode.episode)
-            LabeledContent("Characters", value: "\(episode.characters.count)")
-            LabeledContent("Created", value: episode.created)
+            Group {
+                LabeledContent("Name", value: episode.name)
+                LabeledContent("Air Date", value: episode.airDate)
+                LabeledContent("Episode", value: episode.episode)
+                NavigationLink(destination: EpisodeCharacterListView(episode: episode)) {
+                    LabeledContent("Characters", value: "\(episode.characters.count)")
+                }
+                .tint(.green)
+                LabeledContent("Created", value: episode.created)
+            }
+            .listRowBackground(Color.clear)
         }
+        .scrollContentBackground(.hidden)
         .navigationTitle(episode.episode)
         .navigationBarTitleDisplayMode(.inline)
+        .portalBackground(opacity: 0.45)
     }
 }
 
