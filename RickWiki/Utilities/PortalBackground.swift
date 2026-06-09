@@ -21,14 +21,14 @@ struct PortalBackground: View {
             TimelineView(.animation) { timeline in
                 let t = timeline.date.timeIntervalSinceReferenceDate
 
-                ZStack {
+                ZStack { // ✅ ВТОРОЙ ZStack ЧТОБЫ ВСЁ БЫЛО В ЦЕНТРЕ
                     outerGlow(at: t)
                     midRing(at: t)
                     innerRing(at: t)
                     centerGlow
                     particleLayer(at: t)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(maxWidth: .infinity, maxHeight: .infinity) // ✅ РАСТЯГИВАЕТ НА ВЕСЬ ЭКРАН
             }
         }
         .ignoresSafeArea()

@@ -15,7 +15,6 @@ struct OnboardingView: View {
                 HomeView()
                     .containerRelativeFrame(.vertical)
                     .background(.clear)
-                    .padding(.top, 300)
             }
             .scrollTargetLayout()
             .background(.clear)

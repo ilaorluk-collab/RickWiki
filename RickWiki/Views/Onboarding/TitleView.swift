@@ -49,6 +49,7 @@ struct TitleView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(height: 300)
+                    .padding(.horizontal, 24)
                     .overlay(alignment: .bottom) {
                         ForEach(drops) { drop in
                             Teardrop()
